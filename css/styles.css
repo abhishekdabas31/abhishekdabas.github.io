@@ -1219,6 +1219,55 @@ body.light-mode .fa-sun {
     opacity: 0.8;
 }
 
+/* Social Media Icons */
+.social-media-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid rgba(76, 201, 240, 0.1);
+}
+
+.social-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #888888;
+    opacity: 0.85;
+    transition: var(--transition);
+}
+
+.social-icon i {
+    font-size: 18px;
+}
+
+.social-icon:hover {
+    color: var(--text-color);
+    opacity: 1;
+    transform: translateY(-3px);
+}
+
+/* Responsive styles for social media section */
+@media screen and (max-width: 480px) {
+    .social-media-container {
+        gap: 20px;
+    }
+    
+    .social-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .social-icon i {
+        font-size: 16px;
+    }
+}
+
 #back-to-top {
     position: fixed;
     bottom: 20px;
