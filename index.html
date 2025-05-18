@@ -3,16 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhishek Dabas | Research Scientist</title>
+    <title>Abhishek Dabas | AI Research Scientist</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Three.js for 3D graphics -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Vanilla-tilt.js for 3D hover effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <!-- Typed.js for text typing animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
 </head>
-<body>
+<body class="dark-mode">
     <!-- Particles.js Background -->
     <div id="particles-js"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
     
     <!-- Header Section -->
     <header class="header">
@@ -21,6 +34,7 @@
             <nav class="nav">
                 <ul class="nav-list">
                     <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#experience" class="nav-link">Experience</a></li>
                     <li><a href="#projects" class="nav-link">Projects</a></li>
                     <li><a href="#skills" class="nav-link">Skills</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
@@ -40,15 +54,26 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <canvas id="three-canvas"></canvas>
         <div class="container">
             <div class="hero-content">
                 <h1>Hi, I'm <span>Abhishek Dabas</span></h1>
                 <h2>Research Scientist | Autonomy Evaluation & ML Research</h2>
-                <p>Specializing in LLM and agent systems evaluation frameworks with focus on safety and reliability</p>
+                <p><span id="typing-text"></span></p>
                 <div class="hero-btns">
                     <a href="#projects" class="btn btn-primary">View My Work</a>
                     <a href="#contact" class="btn btn-secondary">Get In Touch</a>
                 </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <div class="arrows">
+                <span class="arrow"></span>
+                <span class="arrow"></span>
+                <span class="arrow"></span>
             </div>
         </div>
     </section>
@@ -186,8 +211,8 @@
         <div class="container">
             <h2 class="section-title">My Skills</h2>
             
+            <!-- Core Skills -->
             <div class="skills-container">
-                <!-- Core Skills -->
                 <div class="skill-category">
                     <h3>Core Research & Engineering</h3>
                     <div class="skill-item">
@@ -270,6 +295,219 @@
                         <span class="skill-name">LlamaIndex</span>
                         <div class="skill-bar">
                             <div class="skill-level" style="width: 87%">87%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tools & Languages Grid -->
+            <h3 class="subsection-title">Tools & Languages</h3>
+            <div class="tools-grid">
+                <!-- Python Ecosystem -->
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <span class="tool-name">Python</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <span class="tool-name">Pandas</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <span class="tool-name">NumPy</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="tool-name">Matplotlib</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <span class="tool-name">OpenCV</span>
+                </div>
+                
+                <!-- DevOps Tools -->
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/docker.svg" alt="Docker" loading="lazy">
+                    </div>
+                    <span class="tool-name">Docker</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/git.svg" alt="Git" loading="lazy">
+                    </div>
+                    <span class="tool-name">Git</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/jenkins.svg" alt="Jenkins" loading="lazy">
+                    </div>
+                    <span class="tool-name">Jenkins</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/fastapi.svg" alt="FastAPI" loading="lazy">
+                    </div>
+                    <span class="tool-name">FastAPI</span>
+                </div>
+                
+                <!-- Data Tools -->
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/elasticsearch.svg" alt="Elasticsearch" loading="lazy">
+                    </div>
+                    <span class="tool-name">Elasticsearch</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/metabase.svg" alt="Metabase" loading="lazy">
+                    </div>
+                    <span class="tool-name">Metabase</span>
+                </div>
+                
+                <!-- AI/ML Tools -->
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/tensorflow.svg" alt="TensorFlow" loading="lazy">
+                    </div>
+                    <span class="tool-name">TensorFlow</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/pytorch.svg" alt="PyTorch" loading="lazy">
+                    </div>
+                    <span class="tool-name">PyTorch</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/huggingface.svg" alt="Hugging Face" loading="lazy">
+                    </div>
+                    <span class="tool-name">Hugging Face</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/scikit-learn.svg" alt="scikit-learn" loading="lazy">
+                    </div>
+                    <span class="tool-name">scikit-learn</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/keras.svg" alt="Keras" loading="lazy">
+                    </div>
+                    <span class="tool-name">Keras</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/nltk.svg" alt="NLTK" loading="lazy">
+                    </div>
+                    <span class="tool-name">NLTK</span>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <img src="images/icons/spacy.svg" alt="spaCy" loading="lazy">
+                    </div>
+                    <span class="tool-name">spaCy</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline Section -->
+    <section id="experience" class="experience section">
+        <div class="container">
+            <h2 class="section-title">Work Experience</h2>
+            
+            <div class="timeline">
+                <!-- Current Position -->
+                <div class="timeline-item">
+                    <div class="timeline-marker current"></div>
+                    <div class="timeline-content">
+                        <div class="experience-card">
+                            <div class="company-logo">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="experience-details">
+                                <h3 class="position">Research Scientist</h3>
+                                <p class="company-date">Current Company • 2022 - Present • Boston, MA</p>
+                                <ul class="achievements">
+                                    <li>Specialized in LLM and agent systems evaluation, designing comprehensive testing methodologies.</li>
+                                    <li>Led development of agentic RAG systems using LlamaIndex framework and Claude 3.5.</li>
+                                    <li>Developed agent memory systems with continuous feedback loops, enhancing performance by 30%.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Past Position - Intellica.ai -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="experience-card">
+                            <div class="company-logo">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="experience-details">
+                                <h3 class="position">Machine Learning Engineer (Full-time + Internship)</h3>
+                                <p class="company-date">Intellica.ai • Nov 2020 – Sep 2021 • Ahmedabad</p>
+                                <ul class="achievements">
+                                    <li>Worked on building a real-time telephonic conversational-ai system for inbound and outbound calls like call routing.</li>
+                                    <li>Improved speech-to-text pipeline for Indian English accent with transfer learning on pre-trained STT model.</li>
+                                    <li>Microservices were developed to evaluate the Montreal Cognitive Assessment (MoCA) test and other cognitive assessments.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project: Entity Extraction -->
+                <div class="timeline-item project">
+                    <div class="timeline-marker project"></div>
+                    <div class="timeline-content">
+                        <div class="experience-card project-card">
+                            <div class="project-icon">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <div class="experience-details">
+                                <h3 class="position">Entity Extraction (NER): For Search</h3>
+                                <ul class="achievements">
+                                    <li>Implemented end-to-end Solr-based Entity Detection Service</li>
+                                    <li>Used various natural language analyzers and filters like stemming, synonyms, stop words and possessive in our analyzer chain of Solr's tagger request handler.</li>
+                                    <li>The algorithm serves as a core service in various client products, identifying entities and retrieving associated academic content.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project: Semantic Search -->
+                <div class="timeline-item project">
+                    <div class="timeline-marker project"></div>
+                    <div class="timeline-content">
+                        <div class="experience-card project-card">
+                            <div class="project-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="experience-details">
+                                <h3 class="position">Semantic Search: LambdaMART Implementation</h3>
+                                <ul class="achievements">
+                                    <li>Implemented results re-ranking utilizing the LambdaMART algorithm for learning-to-rank based ranking algorithm. This significantly improved results relevancy compared to using embedding similarity for ranking.</li>
+                                    <li>Integrated embedding model into the NVIDIA Triton Inference Server for indexing vector database into the hybrid search pipeline.</li>
+                                    <li>Developed search capabilities in 11 Indic languages, and used MuRIL (Multilingual BERT) Model for semantic similarity.</li>
+                                    <li>Established a search feedback pipeline using the Gradio Interface for offline evaluation of various search algorithms on golden dataset.</li>
+                                    <li>Worked on query understanding (QU) and query expansion (QE) for search queries in mixed languages (English+Indic).</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -357,6 +595,7 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script src="js/effects.js"></script>
     
     <!-- Particles.js Library -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>

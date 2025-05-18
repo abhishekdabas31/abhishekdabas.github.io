@@ -1,6 +1,7 @@
 /**
  * Portfolio Website JavaScript
  * Author: Abhishek Dabas
+ * Updated: Futuristic Tech Aesthetic
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,43 +12,95 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('.nav-link');
     const contactForm = document.getElementById('contact-form');
     const backToTopBtn = document.getElementById('back-to-top');
+    const body = document.body;
     
-    // Check for saved theme preference or set default
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (localStorage.getItem('theme')) {
-        document.body.classList.toggle('dark-mode', localStorage.getItem('theme') === 'dark');
+    // Check for saved theme preference or default to dark mode
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-mode');
+        body.classList.remove('dark-mode');
+        // Update particles background on theme change
+        updateParticlesTheme('light');
     } else {
-        document.body.classList.toggle('dark-mode', prefersDarkMode);
+        body.classList.add('dark-mode'); 
+        body.classList.remove('light-mode');
+        updateParticlesTheme('dark');
     }
     
     // Theme Toggle Functionality
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            const isDarkMode = body.classList.contains('dark-mode');
+            
+            if (isDarkMode) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+                updateParticlesTheme('light');
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                updateParticlesTheme('dark');
+            }
+        });
+    }
+    
+    // Function to update particles background on theme change
+    function updateParticlesTheme(theme) {
+        if (!window.pJSDom || !window.pJSDom[0]) return;
         
-        // Save preference to localStorage
-        const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-        localStorage.setItem('theme', theme);
-    });
+        const pJS = window.pJSDom[0].pJS;
+        
+        if (theme === 'dark') {
+            pJS.particles.color.value = "#4cc9f0";
+            pJS.particles.line_linked.color = "#4361ee";
+        } else {
+            pJS.particles.color.value = "#4361ee";
+            pJS.particles.line_linked.color = "#4cc9f0";
+        }
+        
+        // Reset particles to apply new colors
+        pJS.fn.particlesRefresh();
+    }
     
     // Mobile Menu Toggle
-    menuToggle.addEventListener('click', function() {
-        nav.classList.toggle('active');
-        menuToggle.classList.toggle('active');
-    });
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+            document.body.classList.toggle('menu-open');
+        });
+    }
     
     // Close mobile menu when clicking a link
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
             nav.classList.remove('active');
             menuToggle.classList.remove('active');
+            document.body.classList.remove('menu-open');
         });
     });
     
-    // Form Submission
+    // Form Submission with better validation and UI feedback
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Input validation
+            const name = contactForm.querySelector('#name').value.trim();
+            const email = contactForm.querySelector('#email').value.trim();
+            const subject = contactForm.querySelector('#subject').value.trim();
+            const message = contactForm.querySelector('#message').value.trim();
+            
+            if (!name || !email || !subject || !message) {
+                showFormMessage('Please fill all fields.', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(email)) {
+                showFormMessage('Please enter a valid email.', 'error');
+                return;
+            }
             
             // Get form data
             const formData = new FormData(contactForm);
@@ -56,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // In a real application, you would send this data to a server
             console.log('Form submitted:', formValues);
             
-            // Show success message (in a real app, this would happen after successful AJAX call)
+            // Show success message
             showFormMessage('Message sent successfully! I will get back to you soon.', 'success');
             
             // Reset form
@@ -64,7 +117,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Form success/error message
+    // Email validation helper function
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    
+    // Form message with animation
     function showFormMessage(message, type) {
         // Remove any existing messages
         const existingMessage = document.querySelector('.form-message');
@@ -81,16 +139,24 @@ document.addEventListener('DOMContentLoaded', function() {
         if (contactForm) {
             contactForm.appendChild(messageElement);
             
+            // Animate message appearance
+            setTimeout(() => {
+                messageElement.classList.add('active');
+            }, 10);
+            
             // Remove message after 5 seconds
             setTimeout(() => {
-                messageElement.remove();
+                messageElement.classList.remove('active');
+                setTimeout(() => {
+                    messageElement.remove();
+                }, 300);
             }, 5000);
         }
     }
     
     // Back to Top Button
     window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
+        if (window.pageYOffset > 500) {
             backToTopBtn.classList.add('active');
         } else {
             backToTopBtn.classList.remove('active');
@@ -106,89 +172,110 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Project Image Placeholders - Add random colors if no images are set
-    const projectImages = document.querySelectorAll('.project-image img');
-    projectImages.forEach(img => {
-        img.addEventListener('error', function() {
-            const parent = this.parentElement;
-            const colors = ['#4a6bff', '#12b2b3', '#6c63ff', '#ff6b6b', '#0fb9b1'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Replace broken image with a colored div
-            parent.innerHTML = `
-                <div style="width: 100%; height: 100%; background-color: ${randomColor}; 
-                display: flex; align-items: center; justify-content: center; color: white;">
-                    <i class="fas fa-code" style="font-size: 3rem;"></i>
-                </div>
-            `;
-        });
-    });
-    
-    // Animate skill bars on scroll
-    const skillBars = document.querySelectorAll('.skill-level');
-    const animateSkills = () => {
-        skillBars.forEach(bar => {
-            const barPosition = bar.getBoundingClientRect().top;
-            const screenPosition = window.innerHeight / 1.3;
-            
-            if (barPosition < screenPosition) {
-                const width = bar.getAttribute('style');
-                // Only animate if not already animated
-                if (!bar.classList.contains('animated')) {
-                    bar.style.width = '0';
-                    setTimeout(() => {
-                        bar.style.width = width;
-                        bar.classList.add('animated');
-                    }, 100);
+    // Lazy loading for images to improve performance
+    if ('IntersectionObserver' in window) {
+        const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
                 }
-            }
-        });
-    };
-    
-    // Run on initial load
-    animateSkills();
-    
-    // Run on scroll
-    window.addEventListener('scroll', animateSkills);
-    
-    // Add smooth scrolling to all links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            // Prevent default behavior
-            e.preventDefault();
-            
-            // Get the target section
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetSection = document.querySelector(targetId);
-            if (targetSection) {
-                // Scroll to the section
-                targetSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-    
-    // Highlight active nav link on scroll
-    const sections = document.querySelectorAll('section[id]');
-    
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.offsetHeight;
-            
-            if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
+            });
         });
         
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
+        lazyImages.forEach(img => {
+            imageObserver.observe(img);
         });
-    });
+    }
+    
+    // Initialize particles.js with optimized configuration
+    initParticles();
+    
+    function initParticles() {
+        if (typeof particlesJS !== 'undefined') {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 50,
+                        "density": {
+                            "enable": true,
+                            "value_area": 1000
+                        }
+                    },
+                    "color": {
+                        "value": "#4cc9f0"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": false,
+                        "anim": {
+                            "enable": false
+                        }
+                    },
+                    "size": {
+                        "value": 2,
+                        "random": true,
+                        "anim": {
+                            "enable": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#4361ee",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 0.8,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": false
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 150,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        }
+                    }
+                },
+                "retina_detect": true,
+                "fps_limit": 30
+            });
+        }
+    }
 }); 
