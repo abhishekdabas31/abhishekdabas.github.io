@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Particles.js Background -->
+    <div id="particles-js"></div>
+    
     <!-- Header Section -->
     <header class="header">
         <div class="container">
@@ -354,5 +357,114 @@
     </footer>
 
     <script src="js/script.js"></script>
+    
+    <!-- Particles.js Library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 60,
+                        "density": {
+                            "enable": true,
+                            "value_area": 1000
+                        }
+                    },
+                    "color": {
+                        "value": "#4a6bff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.4,
+                        "random": false,
+                        "anim": {
+                            "enable": false
+                        }
+                    },
+                    "size": {
+                        "value": 2.5,
+                        "random": true,
+                        "anim": {
+                            "enable": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 180,
+                        "color": "#12b2b3",
+                        "opacity": 0.3,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.5,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 150,
+                            "line_linked": {
+                                "opacity": 0.8
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 3
+                        }
+                    }
+                },
+                "retina_detect": true,
+                "fps_limit": 30
+            });
+            
+            // Add dark mode support for particles
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    // Allow particles to adjust colors based on theme after a brief delay
+                    setTimeout(() => {
+                        const isDarkMode = document.body.classList.contains('dark-mode');
+                        const pJSCanvas = document.querySelector('#particles-js canvas');
+                        if (pJSCanvas) {
+                            // Force a canvas redraw when theme changes
+                            pJSCanvas.style.visibility = 'hidden';
+                            setTimeout(() => {
+                                pJSCanvas.style.visibility = 'visible';
+                            }, 50);
+                        }
+                    }, 200);
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

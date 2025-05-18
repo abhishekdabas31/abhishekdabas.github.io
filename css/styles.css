@@ -3,6 +3,22 @@
 * Author: Abhishek Dabas
 */
 
+/* ===== PARTICLES BACKGROUND ===== */
+#particles-js {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Behind all content */
+    background-color: var(--bg-color);
+    transition: var(--transition);
+}
+
+body.dark-mode #particles-js {
+    background-color: var(--bg-color);
+}
+
 /* ===== VARIABLES ===== */
 :root {
     /* Light Mode Colors */
@@ -91,6 +107,28 @@ button {
 
 section {
     padding: var(--spacing-xl) 0;
+    position: relative;
+    z-index: 1;
+}
+
+.section {
+    position: relative;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    opacity: 0.85;
+    z-index: -1;
+}
+
+.about::before, .skills::before, .footer::before {
+    background-color: var(--light-bg);
 }
 
 .container {
@@ -262,7 +300,19 @@ body.dark-mode .fa-sun {
     display: flex;
     align-items: center;
     padding-top: 60px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(45deg, rgba(74, 107, 255, 0.05), rgba(18, 178, 179, 0.05));
+    z-index: -1;
 }
 
 .hero-content {
